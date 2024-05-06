@@ -6,25 +6,24 @@ project bus reservation system practice
 #include<stdlib.h>
 #include<string.h>
 #include<conio.h>
-#include<ctype.h>
 #define MAX 5
 
-void login();
-void username();
-void display_schedule();
-void add_bus();
-void display_bus();
-void display_routes();
-void dlt_bus();
-void edit_bus();
-void bus_layout();
+void login();//to show the log in page
+void username();//check the username and password from the user
+void add_bus();//to and new Bus 
+void display_bus();// to show bus details 
+void display_routes();//to display all the routes with bus details
+void dlt_bus();// to delete the bus 
 void booking();
+void passenger_details();
 void add_passenger(char search[]);
-void staff_details();
+void cancel();
+void display_revenue();
 
+int count=0;
 
 typedef struct {
-	char fname[50];
+char fname[50];
 	char lname[50];
 	float phone_number;
 	int no_of_seats; 
@@ -34,21 +33,9 @@ typedef struct {
 	int payment;
 	char side[MAX];
 	int seats[MAX];
-	
-	
+	float total;
 }passenger;
-	
 
-
-/*typedef struct {
-	char fname[50];
-	char lname[50];
-	char role[50];
-	float contact;
-	
-	
-}staff;*/
-//void menu();
 typedef struct {
 	char name[50];
 	char bus_num[50];
@@ -64,6 +51,9 @@ typedef struct {
 	int flagB[24];
 	passenger p;
 }bus_details;
+
+
+
 void main()
 {
 
@@ -77,84 +67,72 @@ void main()
 		printf("\t\t\t______________________________________\n");
 		printf("\t\t\t              MENU                    \n");
 		printf("\t\t\t______________________________________\n");
-		printf("\t\t\t[01] Booking\n");
-		printf("\t\t\t[02] Display available buses\n");
-		printf("\t\t\t[03] Display Schedule\n");
-		printf("\t\t\t[04] Display Bus details\n");
-		printf("\t\t\t[05] Display Staff details\n");
-		printf("\t\t\t[06] Routes\n");
-		printf("\t\t\t[07] Reports\n");
-		printf("\t\t\t[08] Add Bus\n");
-		printf("\t\t\t[09] Delete Bus\n");
-		printf("\t\t\t[10] Update\n");
+		printf("\t\t\t[1] Booking\n");
+		printf("\t\t\t[2] Cancel Booking\n");
+		printf("\t\t\t[3] Display Bus details\n");
+		printf("\t\t\t[4] Display Schedule \ Routes\n");
+		printf("\t\t\t[5] Display Revenue Report\n");
+		printf("\t\t\t[6] Add Bus\n");
+		printf("\t\t\t[7] Delete Bus\n");
 		printf("\t\t\t[0] Exit\n");
-		printf("\t\t\tEnter your choice [0-10]\n");
+		printf("\t\t\tEnter your choice [0-7]\n");
 		printf("\t\t\tYour choice: ");
 		
 		scanf("%d", &choice);
 		
 		system("cls");
 		
-		switch(choice) {
+			switch(choice) {
 			case 1:
-				printf("\t\t\t             Booking\n");
+				printf("\t\t\t              Booking\n");
 				printf("\t\t\t______________________________________\n");
 				display_routes();
 				booking();
 				break;
 			case 2:
-				printf("\t\t\t        Display Available Buses\n");
+				printf("\t\t\t           Cancel Booking\n");
 				printf("\t\t\t______________________________________\n");
+				cancel();
 				break;
 			case 3:
-				printf("\t\t\t        Display Schedules\n");
-				printf("\t\t\t______________________________________\n");
-		
-				break;
-			case 4:
-				printf("\t\t\t        Display Bus Details\n");
+				printf("\t\t\t         Display Bus Details\n");
 				printf("\t\t\t______________________________________\n");
 				display_bus();
 				break;
-			case 5:
-				printf("\t\t\t       Dispaly Staff Display\n");
-				printf("\t\t\t______________________________________\n");
-			//	staff_details();
-				break;
-			case 6:
-				printf("\t\t\t             Routes\n");
+			case 4:
+				printf("\t\t\t       Display Schedules\ Reports\n");
 				printf("\t\t\t______________________________________\n");
 				display_routes();
 				break;
-			case 7:
-				printf("\t\t\t         Display Reports\n");
+			case 5:
+				printf("\t\t\t           Dispaly Revenue\n");
 				printf("\t\t\t______________________________________\n");
+				display_revenue();
 				break;
-			case 8:
-				printf("\t\t\t              Add Bus\n");
+			case 6:
+				printf("\t\t\t             Add Bus\n");
 				printf("\t\t\t______________________________________\n");
 				add_bus();
 				break;
-			case 9:
+			case 7:
 				printf("\t\t\t           Delete Bus\n");
 				printf("\t\t\t______________________________________\n");										
 				dlt_bus();
 				break;
-			case 10:
-				printf("\t\t\t             Update\n");
-				printf("\t\t\t______________________________________\n");
-				edit_bus();
+			
 			case 0:
 				 exit (0);
 				break;
 				
 			default:
-				printf("\t\t\tEnter valid choice");
-				printf("\t\t\t______________________________________\n");
+				printf("Enter valid choice");
+				
 				break;
 		}
-		getch();					
+		getch();		
+				
 	} while(choice !=0 );
+
 }
 
 
@@ -164,11 +142,10 @@ void login(){
 	printf("\t\t\t______________________________________\n");
 	printf("\t\t\t      Bus Reservation system          \n");
 	printf("\t\t\t______________________________________\n");
-	printf("\n\n\n\n");	
+	printf("\n\n\n\n");
 	printf("\t\t\t______________________________________\n");
 	printf("\t\t\t            login page                \n");
 	printf("\t\t\t______________________________________\n");
-	
 	username();
 	
 }
@@ -194,22 +171,18 @@ void username(){
 		}
 	}
 	pwd[i]='\0';
-	
-	
 	c=strcmp(a,user);
 	d=strcmp(pwd,pass);
-	
 	if((c || d)!=0){
 		system("cls");
 		printf("\n\t\t\tinvalid username or password\n");
 		login();		
 	}
-
 }
 
 void add_bus(){
 	bus_details bus;
-	int i,m,total=0, add_more=0;
+	int i,m,total=0, add_more=1;
 	FILE *fp;
 	
 	fp = fopen("Bus_reservation.txt","a+");
@@ -218,14 +191,14 @@ void add_bus(){
 		exit (1);
 	}
 	
-	do{
+	while(add_more ==1){
 		printf("\tEnter Bus Details:\n\n");
 		printf("\tBus name: ");
-		scanf("%s",&bus.name);		
+		scanf("%s",&bus.name);
 		printf("\n\tBus number: ");
-		scanf("%s",&bus.bus_num);		
+		scanf("%s",&bus.bus_num);
 		printf("\n\tDestination: ");
-		scanf("%s",&bus.destination);		
+		scanf("%s",&bus.destination);
 		printf("\n\tRoute: ");
 		scanf("%s",&bus.route);
 		printf("\n\tNo of seats: ");
@@ -234,42 +207,14 @@ void add_bus(){
 		scanf("%d",&bus.available_seats);
 		printf("\n\tTicket price: ");
 		scanf("%f",&bus.ticket_price);
-		printf("\n\tDeparture: yyyy-mm-dd hr:min\n\t");
+		printf("\n\tDeparture: yyyy-mm-dd hr:min\t");
 		scanf("%d-%d-%d%d:%d",&bus.lyyyy,&bus.lmm,&bus.ldd,&bus.lhr,&bus.lmin);
-		
-		printf("\n\tTravel Durations: hr:min \n\t");
+		printf("\n\tDuration : hr:min \t");
 		scanf("%d:%d",&bus.rhr,&bus.rmin);
-		
-	/*		printf("\nEnter staff details\n");
-			printf("staff[1]\n");
-			printf("Name: ");
-			scanf("%s%s",&bus.s1.fname,&bus.s1.lname);
-			printf("\nRole: ");
-			scanf("%s",&bus.s1.role);
-			printf("\ncontact: ");
-			scanf("%f",&bus.s1.contact);
-			printf("staff[2]\n");
-			printf("Name: ");
-			scanf("%s%s",&bus.s2.fname,&bus.s2.lname);
-			printf("\nRole: ");
-			scanf("%s",&bus.s2.role);
-			printf("\ncontact: ");
-			scanf("%f",&bus.s2.contact);
-			printf("staff[3]\n");
-			printf("Name: ");
-			scanf("%s%s",&bus.s3.fname,&bus.s3.lname);
-			printf("\nRole: ");
-			scanf("%s",&bus.s3.role);
-			printf("\ncontact: ");
-			scanf("%f",&bus.s3.contact);
-	*/	
-		
 		fwrite(&bus,sizeof(bus_details),1,fp);
-		
-		printf("\n\nAdd More?? (1 for Yes | 0 for No): ");
-		scanf("%d",&add_more);
-		
-	} while(add_more ==1);
+		printf("\n\tAdd More?? (1 for Yes | 0 for No): ");
+		scanf("%d",&add_more);	
+	} 
 	
 	fclose(fp);
 }
@@ -284,11 +229,11 @@ void display_bus(){
 		exit (1);
 	}
 	
-	printf("\nS.N\tName\t\t\tNumber\t\tticket price\tno of seats\tavailable seats\n");
+	printf("\n\tS.N\tName\t\t\tNumber\t\tticket price\tno of seats\tavailable seats\n");
 	do{	
 		fread(&bus,sizeof(bus_details),1,fp);
 
-		printf("%d\t%-20s\t%-15s\t%.2f\t\t\t%d\t\t%d\n",
+		printf("\t%d\t%-20s\t%-15s\t%.2f\t\t\t%d\t\t%d\n",
 			i,
 			bus.name,
 			bus.bus_num,
@@ -298,23 +243,22 @@ void display_bus(){
 			i++;
 	}while(fread(&bus,sizeof(bus_details),1,fp) != 0);
 	fclose(fp);
-	getch();
 }
 void display_routes(){
 	bus_details bus;
 	int i=1;
 	FILE *fp;
 
-	fp=fopen("Bus_reservation.txt","r");
+	fp=fopen("Bus_reservation.txt","a+");
 	if(fp==NULL){
-		printf("Error opening file\n");
+		printf("\tNo data fount\n");
 		exit(1);
 	}
 	
-	printf("\nS.N\tName\t\tNumber\t\troute\t\tdestination\tleave on\t\tDuration\n");
+	printf("\n\tS.N\tName\t\tNumber\t\troute\t\tdestination\tleave on\t\treach on\n");
 	do{	
 		fread(&bus,sizeof(bus_details),1,fp);
-		printf("%d\t%-10s\t%-10s\t%-15s\t%-15s\t%d-%d-%d %d:%d\t\t%d:%d\n",
+		printf("\t%d\t%-10s\t%-10s\t%-15s\t%-15s\t%d-%d-%d %d:%d\t %d:%d\n",
 			i,
 			bus.name,
 			bus.bus_num,
@@ -328,7 +272,6 @@ void display_routes(){
 	fclose(fp);
 	
 }
-
 void dlt_bus(){
 	display_bus();
 	char search_bus[20];
@@ -336,185 +279,107 @@ void dlt_bus(){
 	int found=0;
 	FILE *fp, *temp ;
 	fp = fopen("Bus_reservation.txt","r");
-	fp=fopen("temp.txt","w");
-	if(fp==NULL){
-		printf("Error opening File");
-		exit (0);
-	}
+	temp=fopen("temp.txt","w");
+	if (fp == NULL || temp == NULL) {
+        printf("Error opening File");
+        exit(0);
+    }
 	
-	printf("enter the Bus number to dlt: ");
+	printf("\t\tenter the Bus number to dlt");
+	
 	scanf("%s",&search_bus);
 	
 	do{
 		fread(&bus,sizeof(bus_details),1,fp);
-		printf("%s",bus.bus_num);
 		if ((strcmp(bus.bus_num, search_bus)) == 0){
-			
 			found=1;
 			continue ;	
-		}
-		else
-		{
+		}else{
 			fwrite(&bus,sizeof(bus_details),1,temp);
-		}	
-	}while(fread(&bus,sizeof(bus_details),1,fp)!=0);
-	
-	if(found==0){
-		printf("unsucessful");
-	}
+		}
+	}while(fread(&bus,sizeof(bus_details),1,fp)!=0);	
 	fclose(fp);
 	fclose(temp);
-	
-	remove("Bus_reservation.txt");
-	rename("temp.txt","Bus_reservation.txt");
+	if (found) {
+        remove("Bus_reservation.txt");
+        rename("temp.txt", "Bus_reservation.txt");
+        printf("\t\tBus record deleted successfully.\n");
+    } else {
+        remove("temp.txt"); // Delete the temporary file if bus not found
+        printf("Bus not found in records.\n");
+    }
 }
-void booking(){
-	char search[25];
-	int found=0;
-	bus_details bus;
-	FILE *fp;
-	int i;
-	int A=0;
-	int B=0;
-	int row;
-	int sideA;
-	int sideB;
-	fp = fopen("Bus_reservation.txt","r");
-	if(fp== NULL){
-		printf("No data fount\n");
-		exit (1);
-	}	
-	printf("Select bus:\n");
-	scanf("%s",&search);
-	do{
-		fread(&bus,sizeof(bus_details),1,fp);
-		if(strcmp(search,bus.bus_num) == 0){
-			found=1;
-			system("cls");
-			printf("Bus name: %10s no: %10s\n",bus.name,bus.bus_num);
-			printf("\n\t\tSIDE A\t\t\t\tSIDE B\n\n");
-			for(row=1;row<13;row++){
-				for(sideA=1;sideA<4;sideA++){
-					if((sideA==3 && row!=12)|| row<=2){
-							printf("               ");
-					}
-					else{
-						if(bus.flagA[A]==1){
-							printf("%2d.Booked      ",A+1);
-							A++;
-						}
-						else{
-							printf("%2d.Available   ",A+1);
-							A++;
-						}
-					}
-			
-				}
-				for(sideB=1;sideB<=2;sideB++){
-					if(bus.flagB[B]==1){
-							printf("%2d.Booked      ",B+1);
-							B++;
-						}
-						else{
-							printf("%2d.Available   ",B+1);
-							B++;
-						}
-					
-				}
-				printf("\n\n");
-			}
-			break;
-		}
-			
-	}while(fread(&bus,sizeof(bus_details),1,fp)==0);
-	if(found==0){
-		printf("not runinng good\n");
-	}
-	add_passenger(search);
-	fclose(fp);
- 
+
+
+void booking() {
+    char search[25];
+    int found = 0;
+    bus_details bus;
+    FILE *fp;
+    int A = 0;
+    int B = 0;
+    int row;
+    int sideA;
+    int sideB;
+    
+    fp = fopen("Bus_reservation.txt", "r");
+    
+    if (fp == NULL) {
+        printf("No data found\n");
+        exit(1);
+    }
+    
+    printf("\nSelect bus no : ");
+    scanf("%s", search);
+    
+    while (fread(&bus, sizeof(bus_details), 1, fp) == 1) {
+        if (strcmp(search,bus.bus_num) == 0) {
+            found = 1;
+            system("cls");
+            printf("\t\tBus name: %10s no: %10s\n", bus.name, bus.bus_num);
+            printf("\n\t\tSIDE A\t\t\t\tSIDE B\n\n");
+            
+            for (row = 1; row <= 12; row++) {
+                for (sideA = 1; sideA < 4; sideA++) {
+                    if ((sideA == 3 && row != 12) || row <= 2) {
+                        printf("               ");
+                    } else {
+                        if (bus.flagA[A] == 1) {
+                          // printf("%2d.Booked      ", A + 1);
+                          printf("%2d.%-12s", A + 1,bus.p.fname);
+                        } else {
+                            printf("%2d.Available   ", A + 1);
+                        }
+                        A++;
+                    }
+                }
+                for (sideB = 1; sideB <= 2; sideB++) {
+                    if (bus.flagB[B] == 1) {
+                        printf("%2d.%-12s", B + 1,bus.p.fname);
+                    } else {
+                        printf("%2d.Available   ", B + 1);
+                    }
+                    B++;
+                }
+                printf("\n\n");
+            }
+            
+            break;
+        }
+    }
+    
+    if (found == 0) {
+        printf("\t\tBus not found ");
+    }
+    
+    fclose(fp);
+    
+    // Move add_passenger call outside the loop
+    if (found==1){
+        add_passenger(search);
+    }
 }
-/*
-void add_passenger(char search[]){
-	bus_details bus;
-	char a='a';
-	char b='b';
-	int add_more=0;
-	int i;
-	int booked;
-	FILE *fp;
-	int found=0;
-	fp=fopen("Bus_reservation.txt","a+");
-	if(fp == NULL){
-		printf("No details found\n");
-		exit(1);
-	}
 
-	do{
-		fread(&bus,sizeof(bus_details),1,fp);
-		if(strcmp(search,bus.bus_num) == 0){
-			found=1;
-			
-			do{
-			
-				printf("Enter passenger details\n");
-				printf("\tName: ");
-				scanf("%s%s",&bus.p.fname,&bus.p.fname);
-				printf("\n\tContact: ");
-				scanf("%f",&bus.p.phone_number);
-				printf("\n\tPick up location: ");
-				scanf("%s",&bus.p.pickup);
-				printf("\n\tPick up Time: ");
-				scanf("%d:%d",&bus.p.hr,&bus.p.min);
-				
-				printf("\n\tDrop: ");
-				scanf("%s",&bus.p.drop);
-				printf("\n\tNumber of  seats: ");
-				scanf("%d",&bus.p.no_of_seats);
-				
-				while(bus.p.no_of_seats>=6){
-					printf("\n\tmaximum booking exceeded enter below 6\n\t");
-					scanf("%d",&bus.p.no_of_seats);
-				}
-				printf("\n\tEnter Side and seat no\n");
-				for(i=0;i<bus.p.no_of_seats;i++){
-					booked=0;				
-				//	do{
-						scanf("%c%d",&bus.p.side[i],&bus.p.seats[i]);
-						//if(bus.p.side[i][1]=='a')
-						if(strcmp(bus.p.side[i],a)==0)
-						{
-							if(bus.flagA[bus.p.seats[i]] == 1 ){
-								printf("the seat is already booked\nselect other: \n");
-							}else{
-								bus.flagA[bus.p.seats[i]] = 1;
-								booked=1;
-							}
-						}
-						if(strcmp(bus.p.side[i],b)==0){
-							if(bus.flagB[bus.p.seats[i]] == 1 ){
-								printf("the seat is already booked\nselect other: \n");
-							}else{
-								bus.flagB[bus.p.seats[i]] = 1;
-								booked=1;
-							}									
-						}
-
-					//}while(booked!=1);											
-				}
-				printf("\tPayment(1 for paid || 0 for pending)\n\t");
-				scanf("%d",&bus.p.payment);
-				
-			}while(add_more == 1);
-			fwrite(&bus,sizeof(bus_details),1,fp);
-		}
-		
-	}while(fread(&bus,sizeof(bus_details),1,fp) != 0);
-	fclose(fp);
-	if(found==0){
-		printf("\nData not found");
-	}	
-}*/
 void add_passenger(char search[]) {
     bus_details bus;
     char a = 'a';
@@ -522,40 +387,37 @@ void add_passenger(char search[]) {
     int i;
     int booked;
     int found = 0;
-    int add_more=0;
+    int add_more = 0,d=0;
     FILE *fp, *temp;
     
     fp = fopen("Bus_reservation.txt", "r+");
-    temp = fopen("temp.txt", "w+");
+    temp = fopen("temp.txt","w+");
     
     if (fp == NULL || temp == NULL) {
         printf("Error opening files.\n");
         exit(1);
     }
 
-    while (fread(&bus,sizeof(bus_details),1,fp) == 1) {
+  do{
+  		
         if (strcmp(search, bus.bus_num) == 0) {
             found = 1;
-
-            // Implement code to add passenger details here.
             do{
             	
-				printf("Enter passenger details\n");
+            	printf("\tEnter passenger details\n");
 				printf("\tName: ");
-				scanf("%s%s",&bus.p.fname,&bus.p.fname);
+				scanf("%s %s",bus.p.fname,bus.p.lname);
 				printf("\n\tContact: ");
 				scanf("%f",&bus.p.phone_number);
 				printf("\n\tPick up location: ");
 				scanf("%s",&bus.p.pickup);
 				printf("\n\tPick up Time: ");
 				scanf("%d:%d",&bus.p.hr,&bus.p.min);
-				
 				printf("\n\tDrop: ");
 				scanf("%s",&bus.p.drop);
 				printf("\n\tNumber of  seats: ");
 				scanf("%d",&bus.p.no_of_seats);
-				
-				while(bus.p.no_of_seats>=6){
+				while(bus.p.no_of_seats>5){
 					printf("\n\tmaximum booking exceeded enter below 6\n\t");
 					scanf("%d",&bus.p.no_of_seats);
 				}
@@ -563,46 +425,140 @@ void add_passenger(char search[]) {
 				for(i=0;i<bus.p.no_of_seats;i++){
 					booked=0;				
 					do{
+						printf("\t");
 						scanf("%c %d",&bus.p.side[i],&bus.p.seats[i]);
-						//if(bus.p.side[i][1]=='a')
-						if(strcmp(bus.p.side[i],a)==0)
+						if(*bus.p.side == a)
 						{
-							if(bus.flagA[bus.p.seats[i]] == 1 ){
-								printf("the seat is already booked\nselect other: \n");
+						
+							if(bus.flagA[bus.p.seats[i]-1] == 1 ){
+								printf("\tthe seat is already booked\nselect other: \n");
 							}else{
-								bus.flagA[bus.p.seats[i]] = 1;
+								bus.flagA[bus.p.seats[i]-1] = 1;
+								printf(" booked \n");
 								booked=1;
 							}
 						}
-						if(strcmp(bus.p.side[i],b)==0){
-							if(bus.flagB[bus.p.seats[i]] == 1 ){
-								printf("the seat is already booked\nselect other: \n");
+						if(*bus.p.side == b){
+							if(bus.flagB[bus.p.seats[i]-1] == 1 ){
+								printf("\tthe seat is already booked\nselect other: \n");
 							}else{
-								bus.flagB[bus.p.seats[i]] = 1;
+								bus.flagB[bus.p.seats[i]-1] = 1;
+								printf(" booked\n");
 								booked=1;
 							}									
 						}
 
-					}while(booked!=1);											
+					}while(!booked);											
 				}
-				printf("\tPayment(1 for paid || 0 for pending)\n\t");
+				bus.p.total=bus.p.no_of_seats*bus.ticket_price;
+				printf("\n\ttotal amount: %d\n",bus.p.total);
+				printf("\tPayment(1 for paid || 0 for pending) ");
 				scanf("%d",&bus.p.payment);
-            // You can use a loop to read passenger data and book seats.
-
-            fwrite(&bus, sizeof(bus_details), 1, temp);
-        } else {
-            fwrite(&bus, sizeof(bus_details), 1, temp);
+				
+				fwrite(&bus, sizeof(bus_details), 1, temp);
+				printf("\n\tAdd More?? (1 for Yes | 0 for No): ");
+				scanf("%d",&add_more);
+				
+			} while( add_more == 1);
         }
-    }
+		else{
+	        fwrite(&bus, sizeof(bus_details), 1, temp);
+	    }
 
+    }while(fread(&bus, sizeof(bus_details), 1, fp) !=0);
+    
     if (!found) {
-        printf("Bus not found.\n");
+        printf("\tBus not found.\n");
     }
-
+    
     fclose(fp);
     fclose(temp);
 
     // Replace the original file with the temporary file
     remove("Bus_reservation.txt");
     rename("temp.txt", "Bus_reservation.txt");
+}
+
+void cancel(){
+    char search_bus[20];
+    char side;
+    int seat;
+    bus_details bus;
+    int found = 0;
+
+    FILE *fp, *temp;
+    fp = fopen("Bus_reservation.txt", "r");
+    temp = fopen("temp.txt", "w");
+
+    if (fp == NULL || temp == NULL) {
+        printf("\tError opening File");
+        exit(0);
+    }
+
+    printf("\tEnter the Bus number: ");
+    scanf("%19s", search_bus);
+    printf("\n\tEnter side and seat: ");
+    scanf(" %c %d", &side, &seat);
+
+    while (fread(&bus, sizeof(bus_details), 1, fp) != 0) {
+        if (strcmp(bus.bus_num, search_bus) == 0) {
+            if ((side == 'a') && (bus.flagA[seat - 1] == 1) ) {
+                bus.flagA[seat - 1] = 0;
+                found = 1;
+                
+                fwrite(&bus, sizeof(bus_details), 1, temp);
+            } else if ((side == 'b') && (bus.flagB[seat - 1] ==1)) {
+                bus.flagB[seat - 1] = 0;
+                found = 1;
+                fwrite(&bus, sizeof(bus_details), 1, temp);
+            }
+        }
+        else{
+        	fwrite(&bus, sizeof(bus_details), 1, temp);
+		}
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    if (found) {
+        remove("Bus_reservation.txt");
+        rename("temp.txt", "Bus_reservation.txt");
+        printf("\tBooking canceled successfully\n");
+    } else {
+        remove("temp.txt"); // Delete the temporary file if bus not found
+        printf("\tSeats not found in records or input is invalid.\n");
+    }
+}
+void display_revenue(){
+	
+	int i,j=1;
+	int revenue=0,count=0;
+	FILE *fp;
+	bus_details bus;
+	fp=fopen("Bus_reservation.txt", "r");
+	printf("\n\tS.N\tName\t\tNumber\t\trevenue\n");
+	do{
+		fread(&bus, sizeof(bus_details), 1, fp);
+		for(i=0;bus.flagA[i];i++){
+			if(bus.flagA[i]==1){
+				count++;
+			}
+		}
+		for(i=0;bus.flagB[i];i++){
+			if(bus.flagB[i]==1){
+				count++;
+			}
+		}
+		printf("%d  ",bus.ticket_price);
+		revenue=bus.ticket_price * count;
+		printf("\t%d\t%-10s\t%-10s\t%-15d\n",
+			j,
+			bus.name,
+			bus.bus_num,
+			revenue
+		);
+		j++;
+	}while (fread(&bus, sizeof(bus_details), 1, fp) != 0);
+	fclose(fp);
 }
