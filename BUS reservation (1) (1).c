@@ -12,7 +12,7 @@ void login();//to show the log in page
 void username();//check the username and password from the user
 void add_bus();//to and new Bus 
 void display_bus();// to show bus details 
-void display_routes();//to display all the routes with bus details
+int display_routes();//to display all the routes with bus details
 void dlt_bus();// to delete the bus 
 void booking();
 void passenger_details();
@@ -86,8 +86,9 @@ void main()
 			case 1:
 				printf("\t\t\t              Booking\n");
 				printf("\t\t\t______________________________________\n");
-				display_routes();
-				booking();
+			//	display_routes();
+				if(display_routes())
+					booking();
 				break;
 			case 2:
 				printf("\t\t\t           Cancel Booking\n");
@@ -102,7 +103,8 @@ void main()
 			case 4:
 				printf("\t\t\t       Display Schedules\ Reports\n");
 				printf("\t\t\t______________________________________\n");
-				display_routes();
+				if(display_routes()==0)
+					return ;
 				break;
 			case 5:
 				printf("\t\t\t           Dispaly Revenue\n");
@@ -244,7 +246,7 @@ void display_bus(){
 	}while(fread(&bus,sizeof(bus_details),1,fp) != 0);
 	fclose(fp);
 }
-void display_routes(){
+int display_routes(){
 	bus_details bus;
 	int i=1;
 	FILE *fp;
@@ -252,25 +254,28 @@ void display_routes(){
 	fp=fopen("Bus_reservation.txt","a+");
 	if(fp==NULL){
 		printf("\tNo data fount\n");
-		exit(1);
+		return 0;
 	}
-	
+	if(!fread(&bus,sizeof(bus_details),1,fp)){
+			printf("\t\t\t Sorry There are no Routes \n");
+			return 0;
+	}
 	printf("\n\tS.N\tName\t\tNumber\t\troute\t\tdestination\tleave on\t\treach on\n");
-	do{	
+	do{
 		fread(&bus,sizeof(bus_details),1,fp);
 		printf("\t%d\t%-10s\t%-10s\t%-15s\t%-15s\t%d-%d-%d %d:%d\t %d:%d\n",
-			i,
-			bus.name,
-			bus.bus_num,
-			bus.route,
-			bus.destination,
-			bus.lyyyy,bus.lmm,bus.ldd,bus.lhr,bus.lmin,
-			bus.rhr,bus.rmin
-			);
-			i++;
+				i,
+				bus.name,
+				bus.bus_num,
+				bus.route,
+				bus.destination,
+				bus.lyyyy,bus.lmm,bus.ldd,bus.lhr,bus.lmin,
+				bus.rhr,bus.rmin
+				);
+				i++;
 	}while(fread(&bus,sizeof(bus_details),1,fp) != 0);
 	fclose(fp);
-	
+	return 1;
 }
 void dlt_bus(){
 	display_bus();
